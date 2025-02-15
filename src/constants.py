@@ -8,3 +8,7 @@ ENUM_TEXT_TAG_STR = {
     "link": "a",
     "image": "img"
 }
+
+
+LINK_REGEX = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+IMAGE_REGEX = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
