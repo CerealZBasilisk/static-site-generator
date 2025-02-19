@@ -28,7 +28,7 @@ class TestTextNode(unittest.TestCase):
     def test_repr(self):
         node = TextNode("This is a test", TextType.BOLD, url="http://example.com")
         
-        expected_repr = "TextNode(This is a test, bold, http://example.com)"
+        expected_repr = "TextNode(This is a test, TextType.BOLD, http://example.com)"
         self.assertEqual(repr(node), expected_repr)
         
 

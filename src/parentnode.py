@@ -25,5 +25,5 @@ class ParentNode(HTMLNode):
         props_html = self.props_to_html()
         return f"<{self.tag}{props_html}>{children_output}</{self.tag}>"
 
-if __name__ == "__main__":
-    pass
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.tag}, children: {self.children}, {self.props})"

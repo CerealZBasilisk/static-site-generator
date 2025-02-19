@@ -11,19 +11,6 @@ class LeafNode(HTMLNode):
             return f"{self.value}"
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.tag}, {self.value}, {self.props})"
 
-
-if __name__ == "__main__":
-    node_props = {
-            "href": "https://www.google.com", 
-            "target": "_blank",
-            }
-    test_node = LeafNode("a", "This is a link node", node_props)
-    expected_props = ' href="https://www.google.com" target="_blank"'
-    print(f"props to html test: {test_node.props_to_html()}")
-    print(f"expected html: {expected_props}")
-
-    # Let's print these values
-    print(f"Props dictionary: {test_node.props}")
-    print(f"Full HTML output: {test_node.to_html()}")
-    print(f"Props HTML part: {test_node.props_to_html()}")

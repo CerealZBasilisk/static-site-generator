@@ -39,7 +39,7 @@ class TestParentNode(unittest.TestCase):
             "target": "_blank",
             }
         node = ParentNode("a", [leaf_with_props, leaf_with_props1, leaf_with_props2], node_props)
-        expected_repr = f'ParentNode(a, None, {[leaf_with_props, leaf_with_props1, leaf_with_props2]}, {node_props})'
+        expected_repr = f'ParentNode(a, children: {[leaf_with_props, leaf_with_props1, leaf_with_props2]}, {node_props})'
         self.assertEqual(repr(node), expected_repr)
 
     def test_props_to_html(self):

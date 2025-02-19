@@ -1,5 +1,6 @@
 from textnode import TextNode, TextType
 
+"""
 
 def split_nodes_delimiter(
     old_nodes: list,       # A list of nodes
@@ -24,6 +25,11 @@ def split_nodes_delimiter(
 
     new_nodes = []
     for node in old_nodes:
+        #print(f"Processing node: {node.text} of type {node.text_type}")
+        if node.text_type != TextType.TEXT:
+            #print(f"Skipping node because it's type {node.text_type}")
+            new_nodes.append(node)
+            continue
         if has_valid_delimiter_pattern(node.text, delimiter):
 
             string_list = node.text.split(delimiter)
@@ -42,9 +48,38 @@ def split_nodes_delimiter(
     return new_nodes
 
 def has_valid_delimiter_pattern(text: str, delimiter: str) -> bool:
+    # Special case for single asterisk
+    if delimiter == "*":
+        # Don't count double asterisks
+        count = text.count("**")
+        # Subtract double asterisks from total asterisks to get single asterisks
+        single_asterisks = text.count("*") - (2 * count)
+        return single_asterisks > 0 and single_asterisks % 2 == 0
+    
+        # For all other delimiters
     count = text.count(delimiter)
-    validation = count % 2 == 0
-    return validation
+    return count > 0 and count % 2 == 0
+
+"""
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    new_nodes = []
+    for old_node in old_nodes:
+        if old_node.text_type != TextType.TEXT:
+            new_nodes.append(old_node)
+            continue
+        split_nodes = []
+        sections = old_node.text.split(delimiter)
+        if len(sections) % 2 == 0:
+            raise ValueError("invalid markdown, formatted section not closed")
+        for i in range(len(sections)):
+            if sections[i] == "":
+                continue
+            if i % 2 == 0:
+                split_nodes.append(TextNode(sections[i], TextType.TEXT))
+            else:
+                split_nodes.append(TextNode(sections[i], text_type))
+        new_nodes.extend(split_nodes)
+    return new_nodes
 
 
 if __name__ == "__main__":

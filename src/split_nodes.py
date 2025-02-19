@@ -7,55 +7,54 @@ from constants import *
 def split_nodes_link(old_nodes: list) -> list:
     result_nodes = []
     for node in old_nodes:
-        links = extract_markdown_links(node.text)
-        if not links:
+        if node.text_type != TextType.TEXT:
             result_nodes.append(node)
-        else:
-            current_text = node.text
-            # Process each link in order
-            for link_text, link_url in links:
-                pattern = f"[{link_text}]({link_url})"
-                # Split into before_link and remaining_text
-                before_link, current_text = current_text.split(pattern, 1)
-                
-                # Add text node for content before link (if any)
-                if before_link:
-                    result_nodes.append(TextNode(before_link, TextType.TEXT))
-                
-                # Add the link node
-                result_nodes.append(TextNode(link_text, TextType.LINK, link_url))
-            
-            # Don't forget any remaining text after last link
-            if current_text:
-                result_nodes.append(TextNode(current_text, TextType.TEXT))
-
+            continue
+        original_text = node.text
+        links = extract_markdown_links(original_text)
+        if len(links) == 0:
+            result_nodes.append(node)
+            continue
+        for link in links:
+            sections = original_text.split(f"[{link[0]}]({link[1]})", 1)
+            if len(sections) != 2:
+                raise ValueError("invalid markdown, link section not closed")
+            if sections[0] != "":
+                result_nodes.append(TextNode(sections[0], TextType.TEXT))
+            result_nodes.append(TextNode(link[0], TextType.LINK, link[1]))
+            original_text = sections[1]
+        if original_text != "":
+            result_nodes.append(TextNode(original_text, TextType.TEXT))
     return result_nodes
+
 
 def split_nodes_images(old_nodes: list) -> list:
     result_nodes = []
     for node in old_nodes:
-        links = extract_markdown_images(node.text)
-        if not links:
+        if node.text_type != TextType.TEXT:
             result_nodes.append(node)
-        else:
-            current_text = node.text
-            # Process each link in order
-            for link_text, link_url in links:
-                pattern = f"![{link_text}]({link_url})"
-                # Split into before_link and remaining_text
-                before_link, current_text = current_text.split(pattern, 1)
-                
-                # Add text node for content before link (if any)
-                if before_link:
-                    result_nodes.append(TextNode(before_link, TextType.TEXT))
-                
-                # Add the link node
-                result_nodes.append(TextNode(link_text, TextType.IMAGE, link_url))
-            
-            # Don't forget any remaining text after last link
-            if current_text:
-                result_nodes.append(TextNode(current_text, TextType.TEXT))
-
+            continue
+        original_text = node.text
+        images = extract_markdown_images(original_text)
+        if len(images) == 0:
+            result_nodes.append(node)
+            continue
+        for alt_text, image in images:
+            sections = original_text.split(f"![{alt_text}]({image})", 1)
+            if len(sections) != 2:
+                raise ValueError("invalid markdown, image section not closed")
+            if sections[0] != "":
+                result_nodes.append(TextNode(sections[0], TextType.TEXT))
+            result_nodes.append(
+                TextNode(
+                    alt_text,
+                    TextType.IMAGE,
+                    image,
+                )
+            )
+            original_text = sections[1]
+        if original_text != "":
+            result_nodes.append(TextNode(original_text, TextType.TEXT))
     return result_nodes
 
 
