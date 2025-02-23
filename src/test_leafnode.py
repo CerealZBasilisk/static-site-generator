@@ -9,7 +9,7 @@ class TestLeafNode(unittest.TestCase):
             "target": "_blank",
             }
         node = LeafNode("a", "This is a link node", node_props)
-        expected_repr = f'LeafNode(a, This is a link node, {node_props})'
+        expected_repr = f'LeafNode(a, "This is a link node", {node_props})'
         self.assertEqual(repr(node), expected_repr)
 
     def test_props_to_html(self):
@@ -29,7 +29,7 @@ class TestLeafNode(unittest.TestCase):
     def test_node_no_tag(self):
         # This should represent raw text
         text_node = LeafNode(None, "Just text", None)
-        expected_repr = f'LeafNode(None, Just text, None)'
+        expected_repr = f'LeafNode(None, "Just text", None)'
         self.assertEqual(repr(text_node), expected_repr)
 
     def test_partial_node(self):

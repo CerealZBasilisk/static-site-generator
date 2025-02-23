@@ -8,15 +8,17 @@ class ParentNode(HTMLNode):
         if not isinstance(children, list):
             children = [children]
 
-        if not all(isinstance(child, HTMLNode) for child in children):
-            raise TypeError("All children must be instances of HTMLNode.")
         
-        if len(children) == 0:
-            raise ValueError("ParentNode must have at least one child.")
         
         super().__init__(tag, None, children, props)
 
     def to_html(self):
+        if not all(isinstance(child, HTMLNode) for child in self.children):
+            raise TypeError("All children must be instances of HTMLNode.")
+        
+        if len(self.children) == 0:
+            raise ValueError("ParentNode must have at least one child.")
+        
         if self.tag is None or self.children is None:
             raise ValueError("Cannot convert ParentNode to HTML: tag or children cannot be None")
         children_html = [child.to_html() for child in self.children]
