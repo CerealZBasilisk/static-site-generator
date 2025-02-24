@@ -45,3 +45,5 @@ BLOCK_PATTERNS_REGEX_STR = {
 
 LINK_REGEX = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
 IMAGE_REGEX = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+H1_REGEX = r"^#\s(.*)"
+FILENAME_REGEX =r".*/([^/]+)\.md$"

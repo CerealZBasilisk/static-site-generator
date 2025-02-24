@@ -8,7 +8,11 @@ def extract_markdown_images(text):
 def extract_markdown_links(text):
     return re.findall(LINK_REGEX, text )
 
-
+def extract_title(markdown):
+    found = re.findall(H1_REGEX, markdown)
+    if not found:
+        raise Exception("Missing h1 Header")
+    return found
 
 if __name__ == "__main__":
     text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"

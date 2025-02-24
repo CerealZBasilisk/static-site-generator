@@ -39,12 +39,12 @@ def markdown_to_html_node(markdown):
                 body_nodes.append(para_html_node)
 
             case BlockType.CODE:
-                code_html_node = LeafNode(BLOCK_TAG_STR[block_type], block)
+                code_html_node = LeafNode(BLOCK_TAG_STR[block_type], block.strip("```"))
                 pre_html_node = ParentNode("pre",[code_html_node])
                 body_nodes.append(pre_html_node)
 
             case BlockType.QUOTE:
-                text_nodes = text_to_textnodes(block.lstrip(">"))
+                text_nodes = text_to_textnodes(block.lstrip(">").strip())
                 html_nodes = []
                 for old_node in text_nodes:
                     new_node = text_node_to_html_node(old_node)
@@ -56,7 +56,9 @@ def markdown_to_html_node(markdown):
                 li_list = []
                 lines_list = block.split("\n")
                 for line in lines_list:
-                    text_nodes = text_to_textnodes(line.lstrip("*-+ "))
+                    filter_quote = re.match(r"^[*,\-,+]\s(.*)",line)
+                    text = filter_quote.group(1)
+                    text_nodes = text_to_textnodes(text)
                     html_nodes = [text_node_to_html_node(text_node) for text_node in text_nodes]
                     li_list.append(ParentNode("li",html_nodes))
                 unorder_list_html_node = ParentNode(BLOCK_TAG_STR[block_type], li_list)

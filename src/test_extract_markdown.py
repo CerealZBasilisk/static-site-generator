@@ -1,5 +1,5 @@
 import unittest
-from extract_markdown import extract_markdown_images, extract_markdown_links
+from extract_markdown import extract_markdown_images, extract_markdown_links, extract_title
 
 class TestMarkdownExtractor(unittest.TestCase):
     def test_extract_single_image(self):
@@ -72,3 +72,23 @@ class TestMarkdownExtractor(unittest.TestCase):
         expected_links = [("link text {with braces}", "link.com")]
         self.assertEqual(extract_markdown_images(text), expected_images)
         self.assertEqual(extract_markdown_links(text), expected_links)
+
+    def test_complex_text(self):
+            text = """
+            # heading text with another below 
+            # heading text 
+            """
+            expected_headings = [("heading text with another below", "heading text")]
+            self.assertEqual(extract_title(text), expected_headings)
+
+    def test_complex_text(self):
+            text = """
+            heading text with another below 
+            heading text 
+            """
+            with self.assertRaises(Exception):
+                h1 = extract_title(text) 
+            
+
+if __name__ == "__main__":
+    unittest.main()

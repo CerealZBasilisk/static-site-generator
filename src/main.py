@@ -1,12 +1,15 @@
-print("hello world")
+import os
 import textnode
+from static_to_public import static_to_public
+from page_generator import generate_pages_recursive
 
 def main():
-    test_node = textnode.TextNode("This is a text node", 
-                                  textnode.TextType.Bold,
-                                  "https://www.boot.dev")
-    
-    print(test_node)
+    static_to_public()
+    content_path = os.path.relpath("./content/")
+    template_path = os.path.relpath("./template.html")
+    dest_dir_path = os.path.relpath("./public/")
+    generate_pages_recursive(content_path , template_path, dest_dir_path)
+
 
 
 
